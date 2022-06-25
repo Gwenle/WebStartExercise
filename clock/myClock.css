@@ -1,0 +1,43 @@
+body{
+    background-color:blue;
+}
+.divPositon{
+    /* background-color: white; */
+    height: 400px;
+    width: 600px;
+    margin-left : auto;
+    margin-right: auto;
+    margin-top: 10%;
+    font-size: 0px;
+}
+.mainArea{
+    height: 100%;
+    width: 70%;
+    /* background-color: blue; */
+    display: inline-block;
+    /* display: flex; */
+}
+.mainTime{
+    color: white;
+    font-size: 127px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    /* display: inline-block; */
+    flex-direction: column;
+
+}
+.secondArea{
+    height: 40%;
+    width: 30%;
+    /* background-color: blueviolet; */
+    display: inline-block;
+}
+.SecTime{
+    color: white;
+    font-size: 40px;
+    display: flex;
+    text-align: center;
+    align-items:center;
+    flex-direction: column;
+}
