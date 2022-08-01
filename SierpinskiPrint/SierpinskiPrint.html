@@ -6,17 +6,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sierpinski镂垫</title>
+    <style>
+        .midArea {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-left: -300px; 
+            margin-top: -300px;
+        }
+
+        .midArea canvas {
+            align-items: center;
+        }
+    </style>
 </head>
 
 <body>
-    <canvas id="graphMain" width="600" height="600">
-        你的浏览器似乎不支持或禁用了canvas标签
-    </canvas>
+    <div class="midArea">
+        <canvas id="graphMain" width="600" height="600">
+            你的浏览器似乎不支持或禁用了canvas标签
+        </canvas>
+    </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/gl-matrix@3.0.0/gl-matrix-min.js"></script>
 <script>
     const mat4 = glMatrix.mat4;
     // Vertex shader program
+    let vertexNum = 3;
     const vsSource = `
     attribute vec4 aVertexPosition;
 
@@ -57,11 +73,11 @@
     function initBuffer(gl) {
         const positionBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-        let vertices = new Float32Array([
+        let vertices = new Float32Array(calculSierPoints(5000, [
             0.0, 1.0, 0.0,
             -1.0, -1.0, 0.0,
             1.0, -1.0, 0.0
-        ]);
+        ]));
 
         gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
 
@@ -170,11 +186,41 @@
 
         {
             const offset = 0;
-            const vertexCount = 3;//这里必须和顶点数一样
-            gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
+            const vertexCount = vertexNum;//这里必须和顶点数一样
+            gl.drawArrays(gl.POINTS, offset, vertexCount);
         }
     }
-
+    function calculSierPoints(n, arr) {
+        let getNpointofArr = (i) => {
+            return {
+                x: arr[i * 3],
+                y: arr[i * 3 + 1],
+                z: arr[i * 3 + 2]
+            }
+        };
+        let setNpointofArr = (i, po) => {
+            arr[i * 3] = po.x;
+            arr[i * 3 + 1] = po.y;
+            arr[i * 3 + 2] = po.z;
+        };
+        let CalMidPoint = (p1, p2) => {
+            return {
+                x: (p1.x + p2.x) / 2,
+                y: (p1.y + p2.y) / 2,
+                z: (p1.z + p2.z) / 2,
+            }
+        };
+        let startPoint = CalMidPoint(getNpointofArr(0), getNpointofArr(1));
+        setNpointofArr(3, startPoint);
+        vertexNum++;
+        for (let i = 0; i < n - 1; i++) {
+            let f = Math.floor(Math.random() * 3);
+            startPoint = CalMidPoint(getNpointofArr(f), startPoint);
+            arr.push(startPoint.x, startPoint.y, startPoint.z);
+            vertexNum++;
+        }
+        return arr;
+    }
     function main() {
         /** @type {HTMLCanvasElement} **/
         const GraphCanvas = document.getElementById("graphMain");
