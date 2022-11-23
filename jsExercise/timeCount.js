@@ -1,4 +1,5 @@
 const { exit } = require('process');
+const {spawn} = require('child_process');
 
 const readline = require('readline').createInterface(
     {
@@ -10,6 +11,10 @@ readline.question('plese input a minute number\n', minute => {
     let i=1;
     let countfun=setInterval(()=>{
         console.log("time remaining "+(minute-i++)+" minute");
+        const processO=spawn('python3',['./weakUp.py']);
+        processO.stdout.on('data',function(data){
+            console.log(data.toString());
+        });
     },60000);
     setTimeout(() => {
         clearInterval(countfun);
